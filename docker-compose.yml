@@ -1,15 +1,15 @@
 version: "3.6"
 services:
-  # hadoop-base:
-  #   image: hadoop-base
-  #   container_name: hadoop-base
-  #   build:
-  #     context: ./
-  #     cache_from:
-  #       - hadoop-base
-  #     dockerfile: ./base/Dockerfile
-  #     args:
-  #       - HADOOP_VERSION=$HADOOP_VERSION
+  hadoop-base:
+    image: hadoop-base
+    container_name: hadoop-base
+    build:
+      context: ./
+      cache_from:
+        - hadoop-base
+      dockerfile: ./base/Dockerfile
+      args:
+        - HADOOP_VERSION=$HADOOP_VERSION
   hadoop-namenode:
     image: hadoop-namenode
     container_name: hadoop-namenode
@@ -24,61 +24,66 @@ services:
         - NAMENODE_FS_PORT=$NAMENODE_FS_PORT
     ports:
       - "9870:9870"
-    # depends_on:
-    #   - hadoop-base
-#  hadoop-resourcemanager:
-#    image: hadoop-resourcemanager
-#    container_name: hadoop-resourcemanager
-#    build:
-#      context: ./
-#      cache_from:
-#        - hadoop-resourcemanager
-#      dockerfile: ./resourcemanager/Dockerfile
-#      args:
-#        - RESOURCE_MANAGER_PORT=$RESOURCE_MANAGER_PORT
-#        - RESOURCE_MANAGER_TRACKER_PORT=$RESOURCE_MANAGER_TRACKER_PORT
-#    depends_on:
-#      - hadoop-namenode
-#      - hadoop-datanode1
-#      - hadoop-datanode2
-#      - hadoop-datanode3
-#      - hadoop-datanode4
-#    ports:
-#      - "8088:8088"
-#  hadoop-historyserver:
-#    image: hadoop-historyserver
-#    container_name: hadoop-historyserver
-#    build:
-#      context: ./
-#      cache_from:
-#        - hadoop-historyserver
-#      dockerfile: ./historyserver/Dockerfile
-#      args:
-#        - HISTORY_MANAGER_PORT=$HISTORY_MANAGER_PORT
-#    depends_on:
-#      - hadoop-namenode
-#      - hadoop-datanode1
-#      - hadoop-datanode2
-#      - hadoop-datanode3
-#      - hadoop-datanode4
-#  hadoop-nodemanager:
-#    image: hadoop-nodemanager
-#    container_name: hadoop-nodemanager
-#    build:
-#      context: ./
-#      cache_from:
-#        - hadoop-nodemanager
-#      dockerfile: ./nodemanager/Dockerfile
-#      args:
-#        - NODE_MANAGER_PORT=$NODE_MANAGER_PORT
-#    depends_on:
-#      - hadoop-namenode
-#      - hadoop-datanode1
-#      - hadoop-datanode2
-#      - hadoop-datanode3
-#      - hadoop-datanode4
-#    ports:
-#      - "8042:8042"
+    healthcheck:
+        test: ["CMD", "curl", "-f", "http://localhost:9870"]
+        interval: 30s
+        timeout: 10s
+        retries: 5
+    depends_on:
+      - hadoop-base
+  hadoop-resourcemanager:
+    image: hadoop-resourcemanager
+    container_name: hadoop-resourcemanager
+    build:
+      context: ./
+      cache_from:
+        - hadoop-resourcemanager
+      dockerfile: ./resourcemanager/Dockerfile
+      args:
+        - RESOURCE_MANAGER_PORT=$RESOURCE_MANAGER_PORT
+        - RESOURCE_MANAGER_TRACKER_PORT=$RESOURCE_MANAGER_TRACKER_PORT
+    depends_on:
+      - hadoop-namenode
+      - hadoop-datanode1
+      - hadoop-datanode2
+      - hadoop-datanode3
+      - hadoop-datanode4
+    ports:
+      - "8088:8088"
+  hadoop-historyserver:
+    image: hadoop-historyserver
+    container_name: hadoop-historyserver
+    build:
+      context: ./
+      cache_from:
+        - hadoop-historyserver
+      dockerfile: ./historyserver/Dockerfile
+      args:
+        - HISTORY_MANAGER_PORT=$HISTORY_MANAGER_PORT
+    depends_on:
+      - hadoop-namenode
+      - hadoop-datanode1
+      - hadoop-datanode2
+      - hadoop-datanode3
+      - hadoop-datanode4
+  hadoop-nodemanager:
+    image: hadoop-nodemanager
+    container_name: hadoop-nodemanager
+    build:
+      context: ./
+      cache_from:
+        - hadoop-nodemanager
+      dockerfile: ./nodemanager/Dockerfile
+      args:
+        - NODE_MANAGER_PORT=$NODE_MANAGER_PORT
+    depends_on:
+      - hadoop-namenode
+      - hadoop-datanode1
+      - hadoop-datanode2
+      - hadoop-datanode3
+      - hadoop-datanode4
+    ports:
+      - "8042:8042"
   hadoop-datanode1:
     image: hadoop-datanode1
     container_name: hadoop-datanode1
@@ -92,6 +97,7 @@ services:
         - DATANODE_TRANSFER_PORT=$DATANODE_TRANSFER_PORT
         - DATANODE_IPC_PORT=$DATANODE_IPC_PORT
         - DATANODE_HTTPS_PORT=$DATANODE_HTTPS_PORT
+    restart: on-failure
     depends_on:
       - hadoop-namenode
     ports:
