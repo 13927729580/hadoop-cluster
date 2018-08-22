@@ -1,5 +1,7 @@
 FROM hadoop-base
 
 ARG NODE_MANAGER_PORT=8042
+
+HEALTHCHECK CMD curl -f http://localhost:$NODE_MANAGER_PORT/ || exit 104
 EXPOSE $NODE_MANAGER_PORT
 CMD $HADOOP_HOME/bin/yarn nodemanager

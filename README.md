@@ -118,7 +118,38 @@ To fix it, you have to run `docker-compose down`. If this does not help, try:
 
 ### Examples
 
-TODO
+
+1. Lets check hadoop version:
+
+```
+    docker exec -it hadoop-namenode bin/hadoop version
+```
+
+You should see something like:
+
+```
+    Hadoop 3.1.1
+    Source code repository https://github.com/apache/hadoop -r 2b9a8c1d3a2caf1e733d57f346af3ff0d5ba529c
+    Compiled by leftnoteasy on 2018-08-02T04:26Z
+    Compiled with protoc 2.5.0
+    From source with checksum f76ac55e5b5ff0382a9f7df36a3ca5a0
+    This command was run using /usr/lib/hadoop-3.1.1/share/hadoop/common/hadoop-common-3.1.1.jar
+```
+
+2. Lets do example from [single cluster](http://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-common/SingleCluster.html):
+
+```
+    docker exec hadoop-namenode mkdir input
+    docker exec hadoop-namenode sh -c "cp etc/hadoop/*.xml input"
+    docker exec hadoop-namenode bin/hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-3.1.1.jar grep input output 'dfs[a-z.]+'
+    docker exec -it hadoop-resourcemanager cat output/*
+
+
+    hadoop fs -mkdir -p /user/hduser/input
+
+    hadoop fs -put <datafile>  /user/hduser/input
+
+```
 
 
 
