@@ -1,12 +1,3 @@
-# NameNode for hadoop cluster
-#
-# FAQ:
-#  - I want to build image
-#       docker build --build-arg CLUSTER_NAME=HADOOP_CLUSTER -t hadoop-name-node .
-#
-#  - I want to run image
-#       docker run -it hadoop-namenode
-
 FROM hadoop-base
 
 ARG CLUSTER_NAME=HADOOP_CLUSTER

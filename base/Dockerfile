@@ -1,8 +1,3 @@
-#
-# This dockerfile builds base image with installed hadoop
-#
-# docker build --build-arg HADOOP_VER=3.1.1 -t hadoop-base .
-#
 FROM centos
 
 ARG HADOOP_VERSION=3.1.1
@@ -62,8 +57,6 @@ ADD base/config/mapred-env.sh $HADOOP_ETC/mapred-env.sh
 ADD base/config/mapred-site.xml $HADOOP_ETC/mapred-site.xml
 ADD base/config/yarn-env.sh $HADOOP_ETC/yarn-env.sh
 ADD base/config/yarn-site.xml $HADOOP_ETC/yarn-site.xml
-ADD base/wait-for-it.sh /wait-for-it.sh
-RUN chmod a+x /wait-for-it.sh
 
 # 6. avoid unnecessary warnings
 RUN mkdir $HADOOP_HOME/logs
