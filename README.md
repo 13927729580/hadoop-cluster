@@ -11,14 +11,14 @@ Basically we have two main components:
 - [HDFS][HDFS]
 - [YARN][YARN]
 
-## HDFS
+### HDFS
 
 [HDFS][HDFS] is a distributed file system designed to run on commodity hardware and has master/slave architecture.
 
 **NameNode** is a single node that manages the file system namespace and regulates access to files by clients.
 There are also many **DataNodes** which manage storage attached to the nodes that they run on.
 
-## YARN
+### YARN
 
 [YARN][YARN] - splits up the functionalities of resource management and job scheduling/monitoring into separate daemons.
 
@@ -26,6 +26,19 @@ There are also many **DataNodes** which manage storage attached to the nodes tha
 
 **NodeManager** is the per-machine framework agent who is responsible for containers,
 monitoring their resource usage (cpu, memory, disk, network) and reporting the same to the ResourceManager/Scheduler.
+
+
+## Docker images
+
+We built many small images for hadoop_ cluster.
+
+- *base/Dockerfile* - image has installed [hadoop][hadoop] binaries.
+- *namenode/Dockerfile* - hdfs master node
+- *datanode/Dockerfile* - hdfs slave node(s)
+- *resourcemanager/Dockerfile* - yarn resource manager node
+- *nodemanager/Dockerfile* - yarn node manager node
+- *historyserver/Dockerfile* - job history server
+
 
 
 [hadoop]: http://hadoop.apache.org/
