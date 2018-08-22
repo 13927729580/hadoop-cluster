@@ -73,9 +73,12 @@ for data node instances.
 
 If you want to stop [hadoop][hadoop] cluster, run following command:
 
-.. code-block:: bash
+
+```
 
     docker-compose down
+
+```
 
 __IMPORTANT__ If you break down running containers by *CTRL+C*,
 by killing processes, etc. next start you can have problems with starting
@@ -104,7 +107,20 @@ hadoop cluster:
 
 ```
 
-To fix it, you have to run `docker-compose down`. 
+To fix it, you have to run `docker-compose down`. If this does not help, try:
+
+```
+
+    docker-compose build --no-cache
+    docker-compose up
+
+```
+
+### Examples
+
+TODO
+
+
 
 
 
