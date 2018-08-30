@@ -156,7 +156,7 @@ First, we create new input directory:
 Second, put some data into hadoop file system:
 
 ```
-  docker exec hadoop-namenode sh -c "bin/hadoop fs -put etc/hadoop/*.xml /input"
+  docker exec hadoop-namenode sh -c "bin/hadoop fs -put etc/hadoop/c*.xml /input"
 ```
 
 Third, check on any node whether some files exist in *input dir* or not:
@@ -191,8 +191,11 @@ Copy file from HDFS into local filesystem:
 
 ```
 
+5. Execute some map reduce task:
 
-
+```
+  docker exec hadoop-resourcemanager bin/hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-3.1.1.jar grep /input /output 'dfs[a-z.]+'
+```
 
 
 [hadoop]: http://hadoop.apache.org/
