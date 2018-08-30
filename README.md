@@ -122,7 +122,7 @@ To fix it, you have to run `docker-compose down`. If this does not help, try:
 1. Lets check hadoop version:
 
 ```
-    docker exec -it hadoop-namenode bin/hadoop version
+    docker exec hadoop-namenode bin/hadoop version
 ```
 
 You should see something like:
@@ -136,23 +136,49 @@ You should see something like:
     This command was run using /usr/lib/hadoop-3.1.1/share/hadoop/common/hadoop-common-3.1.1.jar
 ```
 
-2. Lets do example from [single cluster](http://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-common/SingleCluster.html):
+2. Listing Files in HDFS:
 
 ```
-    docker exec hadoop-namenode mkdir input
-    docker exec hadoop-namenode sh -c "cp etc/hadoop/*.xml input"
-    docker exec hadoop-namenode bin/hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-3.1.1.jar grep input output 'dfs[a-z.]+'
-    docker exec -it hadoop-resourcemanager cat output/*
+  docker exec hadoop-namenode bin/hadoop fs -ls /
 
-
-    hadoop fs -mkdir -p /user/hduser/input
-
-    hadoop fs -put <datafile>  /user/hduser/input
-
+  Found 1 items
+  drwxrwx---   - root supergroup          0 2018-08-30 14:29 /tmp
 ```
 
+3. Insert data into HDFS:
 
+First, we create new input directory:
 
+```
+  docker exec hadoop-namenode bin/hadoop fs -mkdir /input
+```
+
+Second, put some data into hadoop file system:
+
+```
+  docker exec hadoop-namenode sh -c "bin/hadoop fs -put etc/hadoop/*.xml /input"
+```
+
+Third, check on any node whether some files exist in *input dir* or not:
+
+```
+  docker exec hadoop-datanode2 bin/hadoop fs -ls /input
+
+  Found 9 items
+  -rw-r--r--   1 root supergroup       8260 2018-08-30 14:47 /input/capacity-scheduler.xml
+  -rw-r--r--   1 root supergroup        992 2018-08-30 14:47 /input/core-site.xml
+  -rw-r--r--   1 root supergroup      10431 2018-08-30 14:47 /input/hadoop-policy.xml
+  -rw-r--r--   1 root supergroup        867 2018-08-30 14:47 /input/hdfs-site.xml
+  -rw-r--r--   1 root supergroup        620 2018-08-30 14:47 /input/httpfs-site.xml
+  -rw-r--r--   1 root supergroup       3518 2018-08-30 14:47 /input/kms-acls.xml
+  -rw-r--r--   1 root supergroup        682 2018-08-30 14:47 /input/kms-site.xml
+  -rw-r--r--   1 root supergroup       1272 2018-08-30 14:47 /input/mapred-site.xml
+  -rw-r--r--   1 root supergroup       2501 2018-08-30 14:47 /input/yarn-site.xml
+```
+
+4. Retrieve data from HDFS:
+
+TODO
 
 
 [hadoop]: http://hadoop.apache.org/
