@@ -178,7 +178,21 @@ Third, check on any node whether some files exist in *input dir* or not:
 
 4. Retrieve data from HDFS:
 
-TODO
+View some data by *cat* command:
+
+```
+  docker exec hadoop-datanode2 bin/hadoop fs -cat /input/httpfs-site.xml
+```
+
+Copy file from HDFS into local filesystem:
+
+```
+  docker exec hadoop-namenode bin/hadoop fs -get /input /tmp
+
+```
+
+
+
 
 
 [hadoop]: http://hadoop.apache.org/
